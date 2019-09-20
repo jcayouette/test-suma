@@ -1,0 +1,13 @@
+[[upgrade-overview]]
+= Introduction
+
+{productname} has three main components, all of which will need regular updates.
+This guide covers updating your {productname} Server, Proxy, and clients.
+
+In addition to upgrading the main components of {productname}, you are also likely to need to update other underlying technologies, including the database.
+
+It is also possible to automate some upgrades.
+
+This guide is not intended to be read cover to cover.
+Instead, navigate to the component you want to upgrade, then identify the versions you are upgrading from and to.
+If you are upgrading within the same major version, see xref:upgrade:migrate-4x-4x.adoc[].

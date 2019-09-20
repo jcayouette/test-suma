@@ -1,0 +1,51 @@
+[[update.suse.manager]]
+= Package Updates
+
+Before you perform any upgrade, it is important to ensure you have the latest versions of all installed packages.
+This will make your upgrade go much more smoothly.
+
+.Procedure: Updating the {productname} Server
+
+. On the {productname} Server, at the command prompt, as root, stop the spacewalk services:
++
+----
+spacewalk-service stop
+----
+. List available patches:
++
+----
+zypper list-patches
+----
+. Apply all available patches:
++
+----
+zypper patch
+----
+
+
+.Procedure: Updating the Database Schema
+
+If a patch includes a new database schema update, you will need to use the [command]``spacewalk-schema-update`` command.
+
+. On the {productname} Server, at the command prompt, as root, ensure the database service is running:
++
+----
+postgresql start
+----
+. Perform the schema update:
++
+----
+spacewalk-schema-upgrade
+----
+. Restart the spacewalk services:
++
+----
+spacewalk-service start
+----
+
+[IMPORTANT]
+====
+Services affected by a package update are not automatically restarted after an update.
+You need to restart these services manually to avoid potential failures.
+Use [command]``zypper ps`` to check for applications that are using old code and require restarting.
+====
