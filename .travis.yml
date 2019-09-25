@@ -24,7 +24,7 @@ before_install:
   - docker pull antora/antora:latest
   - docker run -v $TRAVIS_BUILD_DIR:/antora --rm -t antora/antora:latest --cache-dir=./.cache/antora suma-site.yml
   #- cp -r public/uyuni/ia-rework-builder ../uyuni/
-  - cp -r build/. ./
+  - cp -r ./build/. ./
   - cd ../
   - git pull
   - git remote rm origin
