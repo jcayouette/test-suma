@@ -1,45 +1,36 @@
 sudo: required
-
+language: generic
 services:
   - docker
+env:
+  global:
+    - GITHUB_REPO: jcayouette/test-suma
+    - secure: "fYpvnij81bSE1xnfEqh9aRzkv6gDI0TpYrR0Aer7HcVv++P7vDePvMxCahserX2Y/ZicG9eu6leVAIbsFhzmqfBdy9eqL45GMQSzf2E8o/KJv2obfVyYxlsZzGA08bsdQs9ZTZg09Xw4R8AuqRMCn7y0tMtVgLH+s8bl9aoeGaup/b+nwTlNxj+DDU1JCYWjOPtpW4VmQLCNEs1igwQhPbZq8x8SfMWlgVLN0AaJsShR48WD0kam33XgLMoemscmfJES8bNTmFUBRzR9u5+0plGK5IX8XJxGmMgPLtD5jHFwGwEQ3vox+lYkXpAPm0TZBufEdkRsSNBOh91DW0TLaOMZZDfJyMipzvt6e2NQFj+VFFDzLO3FshhiLMj82Ogesz6f2xT2xlnkbs+dqln1zBVRtlZxTbMygf9vf159Xc+lTiJ5I2VC0mZCwlsNjXajPrkjvfv5fbFKAB2Ke6yMe1kF/FWJ+PwvOcmfOPVrOqMIJrKpKgl+9u9OPm4HI5pVwXOu+ZrXQAhO6jqcPTF7+kdOMF2dlb3a9Sc1k3vtjmnBiolPUePGCk5W3o4pJPl0nyZqyjnwDWzt1gRiLEc43WjN4eJX720/YvMnfu7CpFzpe+dWweXLn23M8EkC+jsurlAGNeqVNMRZGEz/Y58E7HJyYiuTYFf+iT7UECq4fZc="
 
-addons:
-  apt:
-    sources:
-      - git-core
-
-    packages:
-      - git
-
-language: java
-jdk:
-  - oraclejdk8
 
 before_install:
-  - BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
-  - '[ $(git log --format=%B  $TRAVIS_COMMIT_RANGE | grep -i "#doc" | wc -l) -gt 0 ] && FORCE_DOC_GEN=0 || FORCE_DOC_GEN=1'
-  - MODIFIED_DOCS=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep -E 'README.adoc|^modules/.*.adoc' | wc -l)
-  - '[ $BRANCH == "master" ] && [ $MODIFIED_DOCS -ge 1 ] && GENERATE_DOC=0 || GENERATE_DOC=1'
-  - 'if [ $FORCE_DOC_GEN == 0 ] || [ $GENERATE_DOC == 0 ]; then
-      git config user.name "${GH_USER}";
-      git config user.email "${GH_EMAIL}";
-      git config remote.origin.fetch +refs/heads/*:refs/remotes/origin/*;
-      git fetch --unshallow origin gh-pages;
-      git worktree add -b gh-pages gh-pages origin/gh-pages;
-      GH_REF=$(git remote get-url origin | awk "{sub(/https:\/\//,\"https://${GH_TOKEN}@\")}; 1" | awk "{sub(/\.git/, \"\")} 1");
-      docker pull antora/antora:latest;
-    fi'
-
-script:
-  - 'if [ $FORCE_DOC_GEN == 0 ] || [ $GENERATE_DOC == 0 ]; then
-      docker run -v $TRAVIS_BUILD_DIR:/antora --rm -t antora/antora:latest --pull --stacktrace suma-site.yml;
-    fi'
-
-after_success:
-  - 'if [ $FORCE_DOC_GEN == 0 ] || [ $GENERATE_DOC == 0 ]; then
-      cd gh-pages;
-      touch .nojekyll;
-      git add .;
-      git commit -m"Publishing new documentation update";
-      git push --quiet "${GH_REF}" gh-pages > /dev/null 2>&1;
-    fi'
+  - git clone --depth 100 https://github.com/jcayouette/test-suma -b master
+  #- git clone --depth 100 https://github.com/jcayouette/test-suma -b gh-pages
+  - cd test-suma/
+  # Get latest changes
+  - git fetch --all
+  - git pull -ff
+  # checkout gh page branch
+  - git checkout gh-pages
+  # remove content
+  - rm -rf suse-manager/ pdf/ _/ 404.html _headers index.html robots.txt search-index.js sitemap.xml susemanager-docs_en-pdf.tar.gz
+  #- git clone --depth 1 https://github.com/jcayouette/doc-susemanager-publisher
+  #- cd doc-susemanager-publisher
+  - docker pull antora/antora:latest
+  - docker run -u $UID -v `pwd`:/antora --rm -t antora/antora:latest --cache-dir=./.cache/antora suma-site.yml
+  #- cp -r public/uyuni/ia-rework-builder ../uyuni/
+  - cp -r public/suse-manager/ ../suse-manager/
+  - cd ../
+  - git pull
+  - git remote rm origin
+  - git remote add origin https://${GH_TOKEN}@github.com/jcayouette/test-suma -m gh-pages
+  - git fetch --all
+  - git pull -ff
+  - git add .
+  - git commit -am "New travis commit to gh-pages"
+  - git push --set-upstream origin gh-pages
