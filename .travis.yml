@@ -9,8 +9,8 @@ env:
 
 
 before_install:
-  - git clone --depth 100 https://github.com/jcayouette/test-suma -b master
-  #- git clone --depth 100 https://github.com/jcayouette/test-suma -b gh-pages
+  #- git clone --depth 100 https://github.com/jcayouette/test-suma -b master
+  - git clone --depth 100 https://github.com/jcayouette/test-suma -b gh-pages
   - cd test-suma/
   # Get latest changes
   - git fetch --all
