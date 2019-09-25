@@ -22,7 +22,7 @@ before_install:
   #- git clone --depth 1 https://github.com/jcayouette/doc-susemanager-publisher
   #- cd doc-susemanager-publisher
   - docker pull antora/antora:latest
-  - docker run -v `pwd`:/antora --rm -t antora/antora:latest --cache-dir=./.cache/antora suma-site.yml
+  - docker run -v $TRAVIS_BUILD_DIR:/antora --rm -t antora/antora:latest --cache-dir=./.cache/antora suma-site.yml
   #- cp -r public/uyuni/ia-rework-builder ../uyuni/
   - cp -r public/suse-manager/ ../suse-manager/
   - cd ../
