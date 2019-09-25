@@ -1,7 +1,7 @@
 [[auth-methods]]
 = Authentication Methods
 
-What the hell!
+Testing the buggers
 
 == Authentication Via PAM
 
