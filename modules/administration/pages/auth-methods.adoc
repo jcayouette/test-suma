@@ -1,7 +1,7 @@
 [[auth-methods]]
 = Authentication Methods
 
-Testing Travis build for a third time
+Testing a build
 
 == Authentication Via PAM
 
