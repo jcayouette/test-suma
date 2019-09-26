@@ -14,7 +14,6 @@ before_install:
   #- mkdir -p output
   - docker pull asciidoctor/docker-asciidoctor
   - docker pull antora/antora:latest
-  - docker run -v documents antora/antora:latest --version
 
 
 script:
