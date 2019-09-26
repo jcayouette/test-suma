@@ -58,7 +58,7 @@ travis_fold() {
 
 
 travis_fold "Build Lunr Docker Image"
-    docker build -t lunr/antora:custom -f Dockerfile.custom .
+docker build -t lunr/antora:custom -f Dockerfile.custom .
 travis_fold --
 
 
@@ -80,11 +80,6 @@ travis_fold --
 travis_fold "Install Antora Xref Validator"
 npm i -g @antora/cli@2.1 @antora/site-generator-default@2.1
 npm install -g gitlab:antora/xref-validator
-travis_fold --
-
-
-travis_fold "Validate XREFS"
-NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
 travis_fold --
 
 
@@ -114,9 +109,8 @@ git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/
 travis_fold --
 
 
-
-
-
-
+travis_fold "Validate XREFS"
+NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
+travis_fold --
 
 succeed "We're done."
