@@ -1,9 +1,7 @@
 [[auth-methods]]
 = Authentication Methods
 
-Disgusting old shoes!
 
-Brand new shoes!
 
 == Authentication Via PAM
 
