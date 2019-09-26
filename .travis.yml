@@ -6,15 +6,14 @@ services:
   - docker
 
 before_install:
-  #- docker pull asciidoctor/docker-asciidoctor
   - docker build -t lunr/antora:custom -f Dockerfile.custom .
+  - #- docker pull asciidoctor/docker-asciidoctor
   #- docker pull antora/antora:latest
   #- npm i antora-site-generator-lunr
   #
 
 
 script:
-  #- echo $TRAVIS_BUILD_DIR
   - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml
   #- docker run -u $UID --privileged -v $TRAVIS_BUILD_DIR:/antora/ --name antora-generator --rm -t lunr/antora:custom DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr --stacktrace suma-site.yml
   #- pwd
