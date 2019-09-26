@@ -17,10 +17,12 @@ before_install:
   - gem install pygments.rb
   - gem install coderay
   - asciidoctor-pdf --version
+  - npm i -g @antora/cli@2.1 @antora/site-generator-default@2.1
+  - npm install -g gitlab:antora/xref-validator
 
 
 script:
-#  - docker run -u $UID --privileged -e NODE_PATH="$(npm -g root)" -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator @antora/xref-validator
+  - NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
   - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
   - make pdf-all-suma
   - make pdf-tar-suma
@@ -47,7 +49,6 @@ after_success:
   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
 
 notifications:
-  webhooks:
-    urls:
-      - https://chat.suse.de/channel/galaxy-docs
+  email:
+    -
 
