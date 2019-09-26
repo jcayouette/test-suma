@@ -14,23 +14,25 @@ before_install:
 script:
 #  - docker run -u $UID --privileged -e NODE_PATH="$(npm -g root)" -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator @antora/xref-validator
   - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
+  - make pdf-all-suma
+# Installation Guide PDF
 
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
 
 after_error:
   - docker logs antora-generator
-#  - docker logs asciidoc-to-pdf
+  - docker logs asciidoc-to-pdf
 
 after_failure:
   - docker logs antora-generator
-#  - docker logs asciidoc-to-pdf
+  - docker logs asciidoc-to-pdf
 
 after_success:
   - cd build ;
   - touch .nojekyll
   - git init
   - git config user.name "${GH_USER_NAME}"
-  - git config user.email "{GH_USER_EMAIL}"
+  - git config user.email "${GH_USER_EMAIL}"
   - git add . ; git commit -m "Deploy to GitHub Pages"
   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
