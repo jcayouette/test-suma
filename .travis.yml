@@ -6,19 +6,17 @@ services:
   - docker
 
 before_install:
+  - echo "Building our custom lunr antora image"
   - docker build -t lunr/antora:custom -f Dockerfile.custom .
+  - echo "Pulling the latest asciidoctor and asciidoctor-pdf images"
   - docker pull asciidoctor/docker-asciidoctor;
-  #- docker build -t lunr/antora:custom -f Dockerfile.custom .
-
-
 
 script:
+  - docker run -u $UID --privileged -e NODE_PATH="$(npm -g root)" -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator @antora/xref-validator
   - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
 
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
-
-
 
 after_error:
   - docker logs antora-generator
@@ -29,7 +27,6 @@ after_failure:
 #  - docker logs asciidoc-to-pdf
 
 after_success:
-  - ls -a build/
   - cd build ;
   - touch .nojekyll
   - git init
