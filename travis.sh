@@ -88,12 +88,12 @@ docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lu
 travis_fold --
 
 
-travis_fold "Build SUMA PDFS"
+travis_fold "Build SUMA BOOKS (PDF)"
 make pdf-all-suma
 travis_fold --
 
 
-travis_fold "Tar all PDFS"
+travis_fold "Create Tarball of all PDFS"
 make pdf-tar-suma
 travis_fold --
 
@@ -109,8 +109,8 @@ git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/
 travis_fold --
 
 
-travis_fold "Validate XREFS"
-NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
-travis_fold --
+#travis_fold "Validate XREFS"
+#NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
+#travis_fold --
 
 succeed "We're done."
