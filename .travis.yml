@@ -17,7 +17,8 @@ before_install:
 
 
 script:
-  - docker run -v $TRAVIS_BUILD_DIR:/antora/ --name antora-static-generator --rm -t antora/antora:latest --stacktrace --to-dir output --cache-dir=./.cache/antora suma-site.yml
+  - docker run -v $TRAVIS_BUILD_DIR:/antora/ --name antora-static-generator --rm -t antora/antora:latest --stacktrace --to-dir antora/output --cache-dir=./.cache/antora suma-site.yml
+  - pwd
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
 
