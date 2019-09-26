@@ -7,6 +7,7 @@ services:
 
 before_install:
 # Build Custom docker image for lunrjs and antora
+  - echo "Building LUNR Docker Image"
   - docker build -t lunr/antora:custom -f Dockerfile.custom .
 # Install Asciidoctor
 #  - gem install asciidoctor
@@ -23,6 +24,7 @@ before_install:
 
 script:
 #  - NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
+  - echo "Building SUMA Antora Site"
   - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
   - ./travis.sh
 #  - make pdf-all-suma
