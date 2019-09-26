@@ -83,11 +83,6 @@ npm install -g gitlab:antora/xref-validator
 travis_fold --
 
 
-travis_fold "Build SUMA docs with Antora and Docker"
-docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
-travis_fold --
-
-
 travis_fold "Build SUMA BOOKS (PDF)"
 make pdf-all-suma
 travis_fold --
@@ -95,17 +90,6 @@ travis_fold --
 
 travis_fold "Create Tarball of all PDFS"
 make pdf-tar-suma
-travis_fold --
-
-
-travis_fold "Publish content to GH Pages"
-cd build ;
-touch .nojekyll
-git init
-git config user.name "${GH_USER_NAME}"
-git config user.email "${GH_USER_EMAIL}"
-git add . ; git commit -m "Deploy to GitHub Pages"
-git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
 travis_fold --
 
 
