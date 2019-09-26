@@ -11,14 +11,14 @@ services:
 #    - secure: "fYpvnij81bSE1xnfEqh9aRzkv6gDI0TpYrR0Aer7HcVv++P7vDePvMxCahserX2Y/ZicG9eu6leVAIbsFhzmqfBdy9eqL45GMQSzf2E8o/KJv2obfVyYxlsZzGA08bsdQs9ZTZg09Xw4R8AuqRMCn7y0tMtVgLH+s8bl9aoeGaup/b+nwTlNxj+DDU1JCYWjOPtpW4VmQLCNEs1igwQhPbZq8x8SfMWlgVLN0AaJsShR48WD0kam33XgLMoemscmfJES8bNTmFUBRzR9u5+0plGK5IX8XJxGmMgPLtD5jHFwGwEQ3vox+lYkXpAPm0TZBufEdkRsSNBOh91DW0TLaOMZZDfJyMipzvt6e2NQFj+VFFDzLO3FshhiLMj82Ogesz6f2xT2xlnkbs+dqln1zBVRtlZxTbMygf9vf159Xc+lTiJ5I2VC0mZCwlsNjXajPrkjvfv5fbFKAB2Ke6yMe1kF/FWJ+PwvOcmfOPVrOqMIJrKpKgl+9u9OPm4HI5pVwXOu+ZrXQAhO6jqcPTF7+kdOMF2dlb3a9Sc1k3vtjmnBiolPUePGCk5W3o4pJPl0nyZqyjnwDWzt1gRiLEc43WjN4eJX720/YvMnfu7CpFzpe+dWweXLn23M8EkC+jsurlAGNeqVNMRZGEz/Y58E7HJyYiuTYFf+iT7UECq4fZc="
 
 before_install:
-  #- mkdir -p output
+  - mkdir -p output
   - docker pull asciidoctor/docker-asciidoctor
   - docker pull antora/antora:latest
 
 
 script:
   - echo $TRAVIS_BUILD_DIR
-  - docker run -v $TRAVIS_BUILD_DIR:/antora/ --name antora-static-generator --rm -t antora/antora:latest --stacktrace --to-dir output --cache-dir=./.cache/antora suma-site.yml
+  - docker run -u $UID --privileged -v $TRAVIS_BUILD_DIR:/antora/ --name antora-static-generator --rm -t antora/antora:latest --stacktrace --to-dir antora/output --cache-dir=./.cache/antora suma-site.yml
   - pwd
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
@@ -38,9 +38,9 @@ after_success:
   - ls -a antora/
   - ls -a output/
   - cd output ; #cp -R * ../output ; cd ../output ;
-  - git init
   - git config user.name "${GH_USER_NAME}"
   - git config user.email "{GH_USER_EMAIL}"
+  - git init
   - git add . ; git commit -m "Deploy to GitHub Pages"
   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
 
