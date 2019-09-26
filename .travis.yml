@@ -14,10 +14,10 @@ before_install:
     - MODIFIED_DOCS=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep -E 'README.adoc|^modules/.*.adoc' | wc -l)
     - '[ $BRANCH == "master" ] && [ $MODIFIED_DOCS -ge 1 ] && GENERATE_DOC=0 || GENERATE_DOC=1'
     - 'if [ $FORCE_DOC_GEN == 0 ] || [ $GENERATE_DOC == 0 ]; then
-    docker build -t lunr/antora:custom -f Dockerfile.custom .; then
-    docker pull asciidoctor/docker-asciidoctor;
+    docker build -t lunr/antora:custom -f Dockerfile.custom .;
     fi'
 
+  - docker pull asciidoctor/docker-asciidoctor;
   #- docker build -t lunr/antora:custom -f Dockerfile.custom .
 
 
