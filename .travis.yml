@@ -6,16 +6,12 @@ services:
   - docker
 
 before_install:
-  - BUILD_LUNR_IMAGE="Building custom lunr antora image"
   # Build Custom docker image for lunrjs and antora
-  - echo \e[32m$BUILD_LUNR_IMAGE\e[0m
   - docker build -t lunr/antora:custom -f Dockerfile.custom .
   # Install Asciidoctor
-  - echo "Installing Asciidoctor"
   - gem install asciidoctor
   - asciidoctor --version
   # Install Asciidoctor PDF and Requirements
-  - echo "Installing Asciidoctor PDF"
   - gem install asciidoctor-pdf --pre
   - gem install rouge
   - gem install pygments.rb
@@ -49,3 +45,9 @@ after_success:
   - git config user.email "${GH_USER_EMAIL}"
   - git add . ; git commit -m "Deploy to GitHub Pages"
   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
+
+notifications:
+  webhooks:
+    urls:
+      - https://chat.suse.de/channel/galaxy-docs
+
