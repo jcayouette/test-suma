@@ -6,10 +6,21 @@ services:
   - docker
 
 before_install:
+  # Build Custom docker image for lunrjs and antora
   - echo "Building our custom lunr antora image"
   - docker build -t lunr/antora:custom -f Dockerfile.custom .
-  - echo "Pulling the latest asciidoctor and asciidoctor-pdf images"
-  - docker pull asciidoctor/docker-asciidoctor;
+  # Install Asciidoctor
+  - echo "Installing Asciidoctor"
+  - gem install asciidoctor
+  - asciidoctor --version
+  # Install Asciidoctor PDF Requirements
+  - echo "Installing Asciidoctor PDF"
+  - gem install asciidoctor-pdf --pre
+  - gem install rouge
+  - gem install pygments.rb
+  - gem install coderay
+  - asciidoctor-pdf --version
+
 
 script:
 #  - docker run -u $UID --privileged -e NODE_PATH="$(npm -g root)" -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator @antora/xref-validator
