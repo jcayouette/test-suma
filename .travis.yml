@@ -6,28 +6,27 @@ services:
   - docker
 
 before_install:
-  - \[0Ktravis_fold:start:before_install[0m
-  # Build Custom docker image for lunrjs and antora
-  - docker build -t lunr/antora:custom -f Dockerfile.custom .
-  - \[0Ktravis_fold:end:before_install[0m
-  # Install Asciidoctor
-  - gem install asciidoctor
-  - asciidoctor --version
-  # Install Asciidoctor PDF and Requirements
-  - gem install asciidoctor-pdf --pre
-  - gem install rouge
-  - gem install pygments.rb
-  - gem install coderay
-  - asciidoctor-pdf --version
-  - npm i -g @antora/cli@2.1 @antora/site-generator-default@2.1
-  - npm install -g gitlab:antora/xref-validator
+# Build Custom docker image for lunrjs and antora
+#  - docker build -t lunr/antora:custom -f Dockerfile.custom .
+# Install Asciidoctor
+#  - gem install asciidoctor
+#  - asciidoctor --version
+# Install Asciidoctor PDF and Requirements
+#  - gem install asciidoctor-pdf --pre
+#  - gem install rouge
+#  - gem install pygments.rb
+#  - gem install coderay
+#  - asciidoctor-pdf --version
+#  - npm i -g @antora/cli@2.1 @antora/site-generator-default@2.1
+#  - npm install -g gitlab:antora/xref-validator
 
 
 script:
-  - NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
-  - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
-  - make pdf-all-suma
-  - make pdf-tar-suma
+  - ./travis.sh
+#  - NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
+#  - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
+#  - make pdf-all-suma
+#  - make pdf-tar-suma
 # Installation Guide PDF
 
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
