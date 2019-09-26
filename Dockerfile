@@ -1,3 +1,3 @@
 FROM antora/antora:latest
 
-RUN npm i antora-site-generator-lunr
+RUN npm i -g antora-site-generator-lunr
