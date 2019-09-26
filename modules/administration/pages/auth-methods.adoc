@@ -3,6 +3,8 @@
 
 Disgusting old shoes!
 
+Brand new shoes!
+
 == Authentication Via PAM
 
 {productname} supports network-based authentication systems via Pluggable Authentication Modules (PAM).
