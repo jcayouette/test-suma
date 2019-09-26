@@ -10,11 +10,12 @@ before_install:
   - docker build -t lunr-antora/antora .
   #- docker pull antora/antora:latest
   #- npm i antora-site-generator-lunr
+  #
 
 
 script:
   - echo $TRAVIS_BUILD_DIR
-  - docker run -u $UID --privileged -v $TRAVIS_BUILD_DIR:/antora/ --name antora-static-generator --rm -t lunr-antora/antora DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr suma-site.yml --stacktrace --generator ./node_modules/antora-site-generator-lunr
+  - docker run -u $UID --privileged -v $TRAVIS_BUILD_DIR:/antora/ --name antora-generator --rm -t lunr-antora/antora DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr suma-site.yml --stacktrace --generator ~/$USER./node_modules/antora-site-generator-lunr
   - pwd
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
@@ -22,11 +23,11 @@ script:
 #cp -R * ../output ; cd ../output ;
 
 after_error:
-  - docker logs lunr-antora
+  - docker logs antora-generator
 #  - docker logs asciidoc-to-pdf
 
 after_failure:
-  - docker logs lunr-antora
+  - docker logs antora-generator
 #  - docker logs asciidoc-to-pdf
 
 after_success:
