@@ -57,9 +57,9 @@ travis_fold() {
 }
 
 
-travis_fold "Build Lunr Docker Image"
-docker build -t lunr/antora:custom -f Dockerfile.custom .
-travis_fold --
+#travis_fold "Build Lunr Docker Image"
+#docker build -t lunr/antora:custom -f Dockerfile.custom .
+#travis_fold --
 
 
 travis_fold "Install Asciidoctor"

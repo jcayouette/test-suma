@@ -7,7 +7,7 @@ services:
 
 before_install:
 # Build Custom docker image for lunrjs and antora
-#  - docker build -t lunr/antora:custom -f Dockerfile.custom .
+  - docker build -t lunr/antora:custom -f Dockerfile.custom .
 # Install Asciidoctor
 #  - gem install asciidoctor
 #  - asciidoctor --version
@@ -27,8 +27,6 @@ script:
   - ./travis.sh
 #  - make pdf-all-suma
 #  - make pdf-tar-suma
-# Installation Guide PDF
-
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
 
