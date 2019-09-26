@@ -13,7 +13,9 @@ services:
 before_install:
   #- mkdir -p output
   #- docker pull asciidoctor/docker-asciidoctor
+  - docker build -t
   - docker pull antora/antora:latest
+  - npm i antora-site-generator-lunr
 
 
 script:
