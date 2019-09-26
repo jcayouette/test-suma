@@ -34,6 +34,9 @@ after_failure:
 
 after_success:
   - pwd
+  - ls -a
+  - ls -a antora/
+  - ls -a output/
   - cd output ; #cp -R * ../output ; cd ../output ;
   - git init
   - git config user.name "${GH_USER}"
