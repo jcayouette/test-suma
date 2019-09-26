@@ -14,9 +14,11 @@ before_install:
   #- mkdir -p output
   - docker pull asciidoctor/docker-asciidoctor
   - docker pull antora/antora:latest
+  - docker run -v documents antora/antora:latest --version
 
 
 script:
+  - echo $TRAVIS_BUILD_DIR
   - docker run -v $TRAVIS_BUILD_DIR:/antora/ --name antora-static-generator --rm -t antora/antora:latest --stacktrace --to-dir antora/output --cache-dir=./.cache/antora suma-site.yml
   - pwd
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
@@ -32,6 +34,7 @@ after_failure:
 #  - docker logs asciidoc-to-pdf
 
 after_success:
+  - pwd
   - cd antora/output ; #cp -R * ../output ; cd ../output ;
   - git init
   - git config user.name "${GH_USER}"
