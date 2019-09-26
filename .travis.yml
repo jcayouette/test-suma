@@ -1,26 +1,34 @@
 sudo: required
 
-language: generic
+#language: generic
+language: java
+jdk:
+  - oraclejdk8
 
 services:
   - docker
 
 before_install:
-  - docker build -t lunr/antora:custom -f Dockerfile.custom .
-  - #- docker pull asciidoctor/docker-asciidoctor
-  #- docker pull antora/antora:latest
-  #- npm i antora-site-generator-lunr
-  #
+  - BRANCH=${TRAVIS_PULL_REQUEST_BRANCH:-$TRAVIS_BRANCH}
+    - '[ $(git log --format=%B  $TRAVIS_COMMIT_RANGE | grep -i "#doc" | wc -l) -gt 0 ] && FORCE_DOC_GEN=0 || FORCE_DOC_GEN=1'
+    - MODIFIED_DOCS=$(git diff --name-only $TRAVIS_COMMIT_RANGE | grep -E 'README.adoc|^modules/.*.adoc' | wc -l)
+    - '[ $BRANCH == "master" ] && [ $MODIFIED_DOCS -ge 1 ] && GENERATE_DOC=0 || GENERATE_DOC=1'
+    - 'if [ $FORCE_DOC_GEN == 0 ] || [ $GENERATE_DOC == 0 ]; then
+    docker build -t lunr/antora:custom -f Dockerfile.custom .; then
+    docker pull asciidoctor/docker-asciidoctor;
+    fi'
+
+  #- docker build -t lunr/antora:custom -f Dockerfile.custom .
+
 
 
 script:
   - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
-  #- docker run -u $UID --privileged -v $TRAVIS_BUILD_DIR:/antora/ --name antora-generator --rm -t lunr/antora:custom DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr --stacktrace suma-site.yml
-  #- pwd
+
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
-# --to-dir antora/output
-#cp -R * ../output ; cd ../output ;
+
+
 
 after_error:
   - docker logs antora-generator
@@ -39,30 +47,3 @@ after_success:
   - git config user.email "{GH_USER_EMAIL}"
   - git add . ; git commit -m "Deploy to GitHub Pages"
   - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
-
-#before_install:
-#- git clone --depth 100 https://github.com/jcayouette/test-suma -b master
-#  - git clone --depth 100 https://github.com/jcayouette/test-suma -b gh-pages
-#  - cd test-suma/
-# Get latest changes
-#  - git fetch --all
-#  - git pull -ff
-# checkout gh page branch
-#  - git checkout gh-pages
-# remove content
-#  - rm -rf suse-manager/ pdf/ _/ 404.html _headers index.html robots.txt search-index.js sitemap.xml susemanager-docs_en-pdf.tar.gz
-#- git clone --depth 1 https://github.com/jcayouette/doc-susemanager-publisher
-#- cd doc-susemanager-publisher
-#  - docker pull antora/antora:latest
-#  - docker run -v $TRAVIS_BUILD_DIR:/antora --rm -t antora/antora:latest --cache-dir=./.cache/antora suma-site.yml
-#- cp -r public/uyuni/ia-rework-builder ../uyuni/
-#- cp -r ./build/. ./
-#- cd ../
-#  - git pull
-#  - git remote rm origin
-#  - git remote add origin https://${GH_TOKEN}@github.com/jcayouette/test-suma -m gh-pages
-#  - git fetch --all
-#  - git pull -ff
-#  - git add .
-#  - git commit -am "New travis commit to gh-pages"
-#  - git push --set-upstream origin gh-pages
