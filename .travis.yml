@@ -5,23 +5,16 @@ language: generic
 services:
   - docker
 
-#env:
-#  global:
-#    - GITHUB_REPO: jcayouette/test-suma
-#    - secure: "fYpvnij81bSE1xnfEqh9aRzkv6gDI0TpYrR0Aer7HcVv++P7vDePvMxCahserX2Y/ZicG9eu6leVAIbsFhzmqfBdy9eqL45GMQSzf2E8o/KJv2obfVyYxlsZzGA08bsdQs9ZTZg09Xw4R8AuqRMCn7y0tMtVgLH+s8bl9aoeGaup/b+nwTlNxj+DDU1JCYWjOPtpW4VmQLCNEs1igwQhPbZq8x8SfMWlgVLN0AaJsShR48WD0kam33XgLMoemscmfJES8bNTmFUBRzR9u5+0plGK5IX8XJxGmMgPLtD5jHFwGwEQ3vox+lYkXpAPm0TZBufEdkRsSNBOh91DW0TLaOMZZDfJyMipzvt6e2NQFj+VFFDzLO3FshhiLMj82Ogesz6f2xT2xlnkbs+dqln1zBVRtlZxTbMygf9vf159Xc+lTiJ5I2VC0mZCwlsNjXajPrkjvfv5fbFKAB2Ke6yMe1kF/FWJ+PwvOcmfOPVrOqMIJrKpKgl+9u9OPm4HI5pVwXOu+ZrXQAhO6jqcPTF7+kdOMF2dlb3a9Sc1k3vtjmnBiolPUePGCk5W3o4pJPl0nyZqyjnwDWzt1gRiLEc43WjN4eJX720/YvMnfu7CpFzpe+dWweXLn23M8EkC+jsurlAGNeqVNMRZGEz/Y58E7HJyYiuTYFf+iT7UECq4fZc="
-
 before_install:
-  #- mkdir -p output
   #- docker pull asciidoctor/docker-asciidoctor
-  #- docker build -t
-  - docker pull antora/antora:latest
-  - yarn --help
+  - docker build -t lunr-antora/antora .
+  #- docker pull antora/antora:latest
   #- npm i antora-site-generator-lunr
 
 
 script:
   - echo $TRAVIS_BUILD_DIR
-  - docker run -u $UID --privileged -v $TRAVIS_BUILD_DIR:/antora/ --name antora-static-generator --rm -t antora/antora:latest --stacktrace --cache-dir=./.cache/antora suma-site.yml
+  - docker run -u $UID --privileged -v $TRAVIS_BUILD_DIR:/antora/ --name antora-static-generator --rm -t lunr-antora/antora --stacktrace --cache-dir=./.cache/antora suma-site.yml
   - pwd
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
