@@ -100,7 +100,7 @@ content:
   #- url: .
 
   # Uncomment to build from the remote github repository.
-  - url: https://github.com/jcayouette/test-suma.git
+  - url: https://github.com/jcayouette/test-suma
 
     # To build locally ensure you have your current local branch listed.
     branches:
