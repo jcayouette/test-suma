@@ -1,36 +1,66 @@
 sudo: required
+
 language: generic
+
 services:
   - docker
-env:
-  global:
-    - GITHUB_REPO: jcayouette/test-suma
-    - secure: "fYpvnij81bSE1xnfEqh9aRzkv6gDI0TpYrR0Aer7HcVv++P7vDePvMxCahserX2Y/ZicG9eu6leVAIbsFhzmqfBdy9eqL45GMQSzf2E8o/KJv2obfVyYxlsZzGA08bsdQs9ZTZg09Xw4R8AuqRMCn7y0tMtVgLH+s8bl9aoeGaup/b+nwTlNxj+DDU1JCYWjOPtpW4VmQLCNEs1igwQhPbZq8x8SfMWlgVLN0AaJsShR48WD0kam33XgLMoemscmfJES8bNTmFUBRzR9u5+0plGK5IX8XJxGmMgPLtD5jHFwGwEQ3vox+lYkXpAPm0TZBufEdkRsSNBOh91DW0TLaOMZZDfJyMipzvt6e2NQFj+VFFDzLO3FshhiLMj82Ogesz6f2xT2xlnkbs+dqln1zBVRtlZxTbMygf9vf159Xc+lTiJ5I2VC0mZCwlsNjXajPrkjvfv5fbFKAB2Ke6yMe1kF/FWJ+PwvOcmfOPVrOqMIJrKpKgl+9u9OPm4HI5pVwXOu+ZrXQAhO6jqcPTF7+kdOMF2dlb3a9Sc1k3vtjmnBiolPUePGCk5W3o4pJPl0nyZqyjnwDWzt1gRiLEc43WjN4eJX720/YvMnfu7CpFzpe+dWweXLn23M8EkC+jsurlAGNeqVNMRZGEz/Y58E7HJyYiuTYFf+iT7UECq4fZc="
 
+#env:
+#  global:
+#    - GITHUB_REPO: jcayouette/test-suma
+#    - secure: "fYpvnij81bSE1xnfEqh9aRzkv6gDI0TpYrR0Aer7HcVv++P7vDePvMxCahserX2Y/ZicG9eu6leVAIbsFhzmqfBdy9eqL45GMQSzf2E8o/KJv2obfVyYxlsZzGA08bsdQs9ZTZg09Xw4R8AuqRMCn7y0tMtVgLH+s8bl9aoeGaup/b+nwTlNxj+DDU1JCYWjOPtpW4VmQLCNEs1igwQhPbZq8x8SfMWlgVLN0AaJsShR48WD0kam33XgLMoemscmfJES8bNTmFUBRzR9u5+0plGK5IX8XJxGmMgPLtD5jHFwGwEQ3vox+lYkXpAPm0TZBufEdkRsSNBOh91DW0TLaOMZZDfJyMipzvt6e2NQFj+VFFDzLO3FshhiLMj82Ogesz6f2xT2xlnkbs+dqln1zBVRtlZxTbMygf9vf159Xc+lTiJ5I2VC0mZCwlsNjXajPrkjvfv5fbFKAB2Ke6yMe1kF/FWJ+PwvOcmfOPVrOqMIJrKpKgl+9u9OPm4HI5pVwXOu+ZrXQAhO6jqcPTF7+kdOMF2dlb3a9Sc1k3vtjmnBiolPUePGCk5W3o4pJPl0nyZqyjnwDWzt1gRiLEc43WjN4eJX720/YvMnfu7CpFzpe+dWweXLn23M8EkC+jsurlAGNeqVNMRZGEz/Y58E7HJyYiuTYFf+iT7UECq4fZc="
 
 before_install:
-  #- git clone --depth 100 https://github.com/jcayouette/test-suma -b master
-  - git clone --depth 100 https://github.com/jcayouette/test-suma -b gh-pages
-  - cd test-suma/
-  # Get latest changes
-  - git fetch --all
-  - git pull -ff
-  # checkout gh page branch
-  - git checkout gh-pages
-  # remove content
-  - rm -rf suse-manager/ pdf/ _/ 404.html _headers index.html robots.txt search-index.js sitemap.xml susemanager-docs_en-pdf.tar.gz
-  #- git clone --depth 1 https://github.com/jcayouette/doc-susemanager-publisher
-  #- cd doc-susemanager-publisher
+  - mkdir -p output
+  - docker pull asciidoctor/docker-asciidoctor
   - docker pull antora/antora:latest
-  - docker run -v $TRAVIS_BUILD_DIR:/antora --rm -t antora/antora:latest --cache-dir=./.cache/antora suma-site.yml
-  #- cp -r public/uyuni/ia-rework-builder ../uyuni/
-  #- cp -r ./build/. ./
-  #- cd ../
-  - git pull
-  - git remote rm origin
-  - git remote add origin https://${GH_TOKEN}@github.com/jcayouette/test-suma -m gh-pages
-  - git fetch --all
-  - git pull -ff
-  - git add .
-  - git commit -am "New travis commit to gh-pages"
-  - git push --set-upstream origin gh-pages
+
+
+script:
+  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name antora-static-generator antora/antora:latest --to-dir /documents/output suma-site.yml
+#  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
+#  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-pdf asciidoctor/docker-asciidoctor asciidoctor-pdf -D /documents/output *.adoc
+
+
+after_error:
+  - docker logs antora-static-generator
+#  - docker logs asciidoc-to-pdf
+
+after_failure:
+  - docker logs antora-static-generator
+#  - docker logs asciidoc-to-pdf
+
+after_success:
+  - cd output
+  - git init
+  - git config user.name "${GH_USER}"
+  - git config user.email "{GH_EMAIL}"
+  - git add . ; git commit -m "Deploy to GitHub Pages"
+  - git push --force --quiet "https://${GH_TOKEN}@${GH_REF}" master:gh-pages > /dev/null 2>&1
+
+#before_install:
+#- git clone --depth 100 https://github.com/jcayouette/test-suma -b master
+#  - git clone --depth 100 https://github.com/jcayouette/test-suma -b gh-pages
+#  - cd test-suma/
+# Get latest changes
+#  - git fetch --all
+#  - git pull -ff
+# checkout gh page branch
+#  - git checkout gh-pages
+# remove content
+#  - rm -rf suse-manager/ pdf/ _/ 404.html _headers index.html robots.txt search-index.js sitemap.xml susemanager-docs_en-pdf.tar.gz
+#- git clone --depth 1 https://github.com/jcayouette/doc-susemanager-publisher
+#- cd doc-susemanager-publisher
+#  - docker pull antora/antora:latest
+#  - docker run -v $TRAVIS_BUILD_DIR:/antora --rm -t antora/antora:latest --cache-dir=./.cache/antora suma-site.yml
+#- cp -r public/uyuni/ia-rework-builder ../uyuni/
+#- cp -r ./build/. ./
+#- cd ../
+#  - git pull
+#  - git remote rm origin
+#  - git remote add origin https://${GH_TOKEN}@github.com/jcayouette/test-suma -m gh-pages
+#  - git fetch --all
+#  - git pull -ff
+#  - git add .
+#  - git commit -am "New travis commit to gh-pages"
+#  - git push --set-upstream origin gh-pages
