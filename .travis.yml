@@ -14,7 +14,7 @@ before_install:
 
 
 script:
-  - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml
+  - docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $TRAVIS_BUILD_DIR:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
   #- docker run -u $UID --privileged -v $TRAVIS_BUILD_DIR:/antora/ --name antora-generator --rm -t lunr/antora:custom DOCSEARCH_ENABLED=true DOCSEARCH_ENGINE=lunr --stacktrace suma-site.yml
   #- pwd
 #  - docker run -v $TRAVIS_BUILD_DIR:/documents/ --name asciidoc-to-html asciidoctor/docker-asciidoctor asciidoctor -D /documents/output *.adoc
