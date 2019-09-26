@@ -6,14 +6,15 @@ services:
   - docker
 
 before_install:
+  - BUILD_LUNR_IMAGE="Building custom lunr antora image"
   # Build Custom docker image for lunrjs and antora
-  - echo "Building our custom lunr antora image"
+  - echo \e[32m$BUILD_LUNR_IMAGE\e[0m
   - docker build -t lunr/antora:custom -f Dockerfile.custom .
   # Install Asciidoctor
   - echo "Installing Asciidoctor"
   - gem install asciidoctor
   - asciidoctor --version
-  # Install Asciidoctor PDF Requirements
+  # Install Asciidoctor PDF and Requirements
   - echo "Installing Asciidoctor PDF"
   - gem install asciidoctor-pdf --pre
   - gem install rouge
