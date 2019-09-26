@@ -6,8 +6,10 @@ services:
   - docker
 
 before_install:
+  - \[0Ktravis_fold:start:before_install[0m
   # Build Custom docker image for lunrjs and antora
   - docker build -t lunr/antora:custom -f Dockerfile.custom .
+  - \[0Ktravis_fold:end:before_install[0m
   # Install Asciidoctor
   - gem install asciidoctor
   - asciidoctor --version
