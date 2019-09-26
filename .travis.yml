@@ -22,11 +22,11 @@ script:
 #cp -R * ../output ; cd ../output ;
 
 after_error:
-  - docker logs antora-static-generator
+  - docker logs lunr-antora
 #  - docker logs asciidoc-to-pdf
 
 after_failure:
-  - docker logs antora-static-generator
+  - docker logs lunr-antora
 #  - docker logs asciidoc-to-pdf
 
 after_success:
