@@ -1,4 +1,4 @@
 FROM antora/antora:latest
 
 RUN yarn global add antora-site-generator-lunr
-RUN npm install -g gitlab:antora/xref-validator
+RUN yarn global add gitlab:antora/xref-validator
