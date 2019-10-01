@@ -93,8 +93,8 @@ make pdf-tar-suma
 travis_fold --
 
 
-#travis_fold "Validate XREFS"
-#NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
-#travis_fold --
+travis_fold "Validate XREFS"
+NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
+travis_fold --
 
 succeed "We're done."
