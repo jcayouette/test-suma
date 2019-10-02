@@ -1,0 +1,14 @@
+name: Build SUMA docs with Antora
+
+on: [push]
+
+jobs:
+
+  build:
+  
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v1
+    - name: Build SUMA Docs with Antora
+      run: docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v build:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
