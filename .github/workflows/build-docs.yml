@@ -10,12 +10,20 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
-    - name: Build Lunr Antora Image and build SUMA Docs
+    - name: Build Lunr Antora Custom Image
+      run: docker build -t lunr/antora:custom -f Dockerfile.custom .
+    
+    - name: Build Docs with Custom Image
       run: |
-        docker build -t lunr/antora:custom -f Dockerfile.custom .
         docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $GITHUB_WORKSPACE:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
         cd build/
         ls -a
+        
+    - uses: actions/setup-ruby@v1
+      with:
+        ruby-version: '2.6.5'
+    - name: Install Asciidoctor and Asciidoctor PDF
+      run:  |
         gem install asciidoctor
         gem install asciidoctor-pdf --pre
         gem install rouge
