@@ -10,6 +10,10 @@ jobs:
     
     steps:
     - uses: actions/checkout@v1
+    - uses: actions/setup-ruby@v1
+    - name: Set up Ruby 2.6  
+      with:
+        ruby-version: 2.6.x
     - name: Build Lunr Antora Custom Image
       run: docker build -t lunr/antora:custom -f Dockerfile.custom .
     
@@ -19,9 +23,6 @@ jobs:
         cd build/
         ls -a
         
-    - uses: actions/setup-ruby@v1
-      with:
-        ruby-version: '2.5.3'
     - name: Install Asciidoctor and Asciidoctor PDF
       run:  |
         gem install asciidoctor
