@@ -1,12 +1,8 @@
 name: SUMA Build Action
-
 on: [push]
-
 jobs:
-
   build:
     runs-on: ubuntu-latest
-    
     steps:
     - uses: actions/checkout@v1
     - name: Set up Ruby 2.6
@@ -17,11 +13,9 @@ jobs:
     - name: Build Lunr/Antora Custom Docker Image
       run: docker build -t lunr/antora:custom -f Dockerfile.custom .
       
-    
     - uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.6.x
-    
     
     - name: Build SUMA Docs with Lunr/Antora Custom Docker Image
       run: |
