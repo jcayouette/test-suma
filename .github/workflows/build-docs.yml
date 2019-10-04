@@ -19,24 +19,24 @@ jobs:
         #cd build/
         ls -a
         
-    #- name: Install Asciidoctor and Asciidoctor PDF
-    #  run: |
-    #    gem install asciidoctor
-    #    gem install asciidoctor-pdf --pre
-    #    gem install rouge
-    #    gem install pygments.rb
-    #    gem install coderay
-    #    asciidoctor --version
-    #    asciidoctor-pdf --version
+    - name: Install Asciidoctor and Asciidoctor PDF
+      run: |
+        gem install asciidoctor
+        gem install asciidoctor-pdf --pre
+        gem install rouge
+        gem install pygments.rb
+        gem install coderay
+        asciidoctor --version
+        asciidoctor-pdf --version
         
-    #- name: Build SUMA PDF Documents with Asciidoctor and Asciidoctor-pdf
-    #  run: make pdf-all-suma
+    - name: Build SUMA PDF Documents with Asciidoctor and Asciidoctor-pdf
+      run: make pdf-all-suma
         
-    #- name: Create Tarball of all PDF Documents
-    #  run: |
-    #    make pdf-tar-suma
-    #    ls -a build/
-    #    ls -a build/pdf
+    - name: Create Tarball of all PDF Documents
+      run: |
+        make pdf-tar-suma
+        ls -a build/
+        ls -a build/pdf
         
     - name: Add no Jekyll
       run: touch build/.nojekyll
