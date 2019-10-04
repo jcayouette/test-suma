@@ -43,4 +43,8 @@ jobs:
       run: make pdf-all-suma
         
     - name: Create Tarball of all PDF Documents
-      run: make pdf-tar-suma
+      run: |
+        make pdf-tar-suma
+        ls -a build/
+        ls -a build/pdf
+      
