@@ -1,9 +1,7 @@
 [[auth-methods]]
 = Authentication Methods
 
-TESTING a build
-
-I need a large cup of coffee!
+It took a VERY large cup of coffee to read all this!
 
 == Authentication Via PAM
 
