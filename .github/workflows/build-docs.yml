@@ -21,7 +21,7 @@ jobs:
         
     - uses: actions/setup-ruby@v1
       with:
-        ruby-version: '2.6.5'
+        ruby-version: '2.5.3'
     - name: Install Asciidoctor and Asciidoctor PDF
       run:  |
         gem install asciidoctor
