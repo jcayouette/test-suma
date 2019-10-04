@@ -29,29 +29,29 @@ jobs:
         #cd build/
         ls -a
         
-    - name: Install Asciidoctor and Asciidoctor PDF
-      run: |
-        gem install asciidoctor
-        gem install asciidoctor-pdf --pre
-        gem install rouge
-        gem install pygments.rb
-        gem install coderay
-        asciidoctor --version
-        asciidoctor-pdf --version
+    #- name: Install Asciidoctor and Asciidoctor PDF
+    #  run: |
+    #    gem install asciidoctor
+    #    gem install asciidoctor-pdf --pre
+    #    gem install rouge
+    #    gem install pygments.rb
+    #    gem install coderay
+    #    asciidoctor --version
+    #    asciidoctor-pdf --version
         
-    - name: Build SUMA PDF Documents with Asciidoctor and Asciidoctor-pdf
-      run: make pdf-all-suma
+    #- name: Build SUMA PDF Documents with Asciidoctor and Asciidoctor-pdf
+    #  run: make pdf-all-suma
         
-    - name: Create Tarball of all PDF Documents
-      run: |
-        make pdf-tar-suma
-        ls -a build/
-        ls -a build/pdf
+    #- name: Create Tarball of all PDF Documents
+    #  run: |
+    #    make pdf-tar-suma
+    #    ls -a build/
+    #    ls -a build/pdf
         
     - name: Deploy to GH-PAGES
       uses: JamesIves/github-pages-deploy-action@master
       env:
-        ACCESS_TOKEN: ${{ secrets.SUPER_SECRET }}
+        ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
         BASE_BRANCH: master # The branch the action should deploy from.
         BRANCH: gh-pages # The branch the action should deploy to.
         FOLDER: build # The folder the action should deploy.        
