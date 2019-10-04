@@ -9,12 +9,14 @@ jobs:
     
     steps:
     - uses: actions/checkout@master
+    - name: Build Lunr Antora Custom Image
+      run: docker build -t lunr/antora:custom -f Dockerfile.custom .
+      
     - name: Set up Ruby 2.6
     - uses: actions/setup-ruby@v1
       with:
         ruby-version: 2.6.x
-    - name: Build Lunr Antora Custom Image
-      run: docker build -t lunr/antora:custom -f Dockerfile.custom .
+    
     
     - name: Build Docs with Custom Image
       run: |
