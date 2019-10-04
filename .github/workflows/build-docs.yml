@@ -14,7 +14,7 @@ jobs:
       with: 
         ruby-version: 2.6.x
       
-    - name: Build Lunr Antora Custom Image
+    - name: Build Lunr/Antora Custom Docker Image
       run: docker build -t lunr/antora:custom -f Dockerfile.custom .
       
     
@@ -23,7 +23,7 @@ jobs:
         ruby-version: 2.6.x
     
     
-    - name: Build Docs with Custom Image
+    - name: Build SUMA Docs with Lunr/Antora Custom Docker Image
       run: |
         docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $GITHUB_WORKSPACE:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
         #cd build/
@@ -39,7 +39,7 @@ jobs:
         asciidoctor --version
         asciidoctor-pdf --version
         
-    - name: Build SUMA PDF Documents
+    - name: Build SUMA PDF Documents with Asciidoctor and Asciidoctor-pdf
       run: make pdf-all-suma
         
     - name: Create Tarball of all PDF Documents
