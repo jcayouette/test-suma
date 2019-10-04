@@ -48,6 +48,9 @@ jobs:
     #    ls -a build/
     #    ls -a build/pdf
         
+    - name: Add no Jekyll
+      run: touch build/.nojekyll
+          
     - name: Deploy to GH-PAGES
       uses: JamesIves/github-pages-deploy-action@master
       env:
