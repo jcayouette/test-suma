@@ -13,4 +13,4 @@ jobs:
     - name: Build Lunr Antora Image and build SUMA Docs
       run: |
         docker build -t lunr/antora:custom -f Dockerfile.custom .
-        docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v build:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
+        docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $GITHUB_WORKSPACE:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
