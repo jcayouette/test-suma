@@ -2,6 +2,7 @@
 = Authentication Methods
 
 It took a VERY large cup of coffee to read all this!
+I needed another big cup of coffee!
 
 == Authentication Via PAM
 
