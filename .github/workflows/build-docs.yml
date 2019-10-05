@@ -1,4 +1,4 @@
-name: Suma Actions
+name: SUMA CI STATUS
 
 on: [push]
 
