@@ -1,4 +1,4 @@
-name: build-test-deploy
+name: Suma Actions
 
 on: [push]
 
