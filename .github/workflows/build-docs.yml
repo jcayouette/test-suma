@@ -1,8 +1,11 @@
 name: SUMA Build Action
+
 on: [push]
+
 jobs:
   build:
     runs-on: ubuntu-latest
+    
     steps:
     - name: Checkout Master 
       uses: actions/checkout@v1
@@ -12,12 +15,11 @@ jobs:
       with: 
         ruby-version: 2.6.x
         
-        
     - name: Set up NodeJS
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
-    - run: npm install
+    #- run: npm install
     
     - name: Build Lunr/Antora Custom Docker Image
       run: docker build -t lunr/antora:custom -f Dockerfile.custom .
@@ -31,7 +33,6 @@ jobs:
       run: |
         NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
         
-    
     - name: Build SUMA Docs with Lunr/Antora Custom Docker Image
       run: |
         docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $GITHUB_WORKSPACE:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
