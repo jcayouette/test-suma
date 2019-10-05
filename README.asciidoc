@@ -1,8 +1,8 @@
-# test-suma
+= test-suma
 
-image:https://travis-ci.com/jcayouette/test-suma.svg?branch=master["Build Status", link="https://travis-ci.com/jcayouette/test-suma"]
+//image:https://travis-ci.com/jcayouette/test-suma.svg?branch=master["Build Status", link="https://travis-ci.com/jcayouette/test-suma"]
 
-
+image:https://github.com/jcayouette/test-suma/workflows/build-docs/badge.svg["Actions Status", link="https://github.com/jcayouette/test-suma/actions]
 
 Testing docker build
 
