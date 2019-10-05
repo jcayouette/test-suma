@@ -7,24 +7,24 @@ jobs:
     runs-on: ubuntu-latest
     
     steps:
-    - name: Checkout Master 
+    - name: '[CHECKOUT] Master' 
       uses: actions/checkout@v1
     
-    - name: Set up Ruby 2.6
+    - name: '[TOOLCHAIN] Set up Ruby 2.6'
       uses: actions/setup-ruby@v1
       with: 
         ruby-version: 2.6.x
         
-    - name: Set up NodeJS
+    - name: '[TOOLCHAIN] Set up NodeJS'
       uses: actions/setup-node@v1
       with:
         node-version: '10.x'
     #- run: npm install
     
-    - name: Build Lunr/Antora Custom Docker Image
+    - name: '[BUILD IMAGE] Lunr/Antora Custom Docker Image'
       run: docker build -t lunr/antora:custom -f Dockerfile.custom .
     
-    - name: Install Antora XREF Validator
+    - name: '[TOOLCHAIN] Install Antora XREF Validator'
       run: |
         npm i -g @antora/cli@2.1 @antora/site-generator-default@2.1
         npm install -g gitlab:antora/xref-validator
@@ -33,13 +33,13 @@ jobs:
       run: |
         NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
         
-    - name: Build SUMA Docs with Lunr/Antora Custom Docker Image
+    - name: '[BUILD] SUMA Docs with Lunr/Antora Custom Docker Image'
       run: |
         docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $GITHUB_WORKSPACE:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
         #cd build/
         ls -a
         
-    - name: Install Asciidoctor and Asciidoctor PDF
+    - name: '[TOOLCHAIN] Install Asciidoctor and Asciidoctor PDF'
       run: |
         gem install asciidoctor
         gem install asciidoctor-pdf --pre
@@ -49,19 +49,19 @@ jobs:
         asciidoctor --version
         asciidoctor-pdf --version
         
-    - name: Build SUMA PDF Documents with Asciidoctor and Asciidoctor-pdf
+    - name: '[BUILD] SUMA PDF Documents with Asciidoctor and Asciidoctor-pdf'
       run: make pdf-all-suma
         
-    - name: Create Tarball of all PDF Documents
+    - name: '[PACKAGE] Tarball PDF Docs'
       run: |
         make pdf-tar-suma
         ls -a build/
         ls -a build/pdf
         
-    - name: Add no Jekyll
+    - name: '[DEPLOY] .nojekyll'
       run: touch build/.nojekyll
           
-    - name: Deploy to GH-PAGES
+    - name: '[DEPLOY] to GH-PAGES'
       uses: JamesIves/github-pages-deploy-action@master
       env:
         ACCESS_TOKEN: ${{ secrets.GH_TOKEN }}
