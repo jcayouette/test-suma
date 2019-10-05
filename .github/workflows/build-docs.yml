@@ -11,7 +11,14 @@ jobs:
       uses: actions/setup-ruby@v1
       with: 
         ruby-version: 2.6.x
-      
+        
+        
+    - name: Set up Node
+      uses: actions/setup-node@v1
+      with:
+        node-version: '10.x'
+    - run: npm install
+    
     - name: Build Lunr/Antora Custom Docker Image
       run: docker build -t lunr/antora:custom -f Dockerfile.custom .
     
