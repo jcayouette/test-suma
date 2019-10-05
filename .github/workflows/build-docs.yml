@@ -15,6 +15,16 @@ jobs:
     - name: Build Lunr/Antora Custom Docker Image
       run: docker build -t lunr/antora:custom -f Dockerfile.custom .
     
+    - name: Install Antora XREF Validator
+      run: |
+        npm i -g @antora/cli@2.1 @antora/site-generator-default@2.1
+        npm install -g gitlab:antora/xref-validator
+        
+    - name: Validate XREFS (TEST)
+      run: |
+        NODE_PATH="$(npm -g root)" antora --generator @antora/xref-validator suma-site.yml
+        
+    
     - name: Build SUMA Docs with Lunr/Antora Custom Docker Image
       run: |
         docker run -u $UID --privileged -e DOCSEARCH_ENABLED=true -e DOCSEARCH_ENGINE=lunr -v $GITHUB_WORKSPACE:/antora/ --rm -t lunr/antora:custom suma-site.yml --generator antora-site-generator-lunr
