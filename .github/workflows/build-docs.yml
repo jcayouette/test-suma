@@ -1,4 +1,4 @@
-name: build test deploy
+name: build-test-deploy
 
 on: [push]
 
