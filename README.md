@@ -1,6 +1,6 @@
 # test-suma
 
-[![Actions Status](https://github.com/jcayouette/test-suma/tree/master/workflows/build-docs/badge.svg)](https://github.com/jcayouette/test-suma/actions)
+[![](https://github.com/jcayouette/test-suma/tree/master/workflows/build-docs.yml/badge.svg)](https://github.com/jcayouette/test-suma/actions)
 
 Testing docker build
 
