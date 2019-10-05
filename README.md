@@ -2,7 +2,7 @@
 
 ![Actions Status](https://github.com/jcayouette/test-suma/tree/master/workflows/build%20docs.yml/badge.svg)
 
-
+https://github.com/actions/toolkit/workflows/Main%20workflow/badge.svg
 
 Testing docker build
 
