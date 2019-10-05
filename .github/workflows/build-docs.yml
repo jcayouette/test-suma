@@ -1,4 +1,4 @@
-name: suma status
+name: build test deploy
 
 on: [push]
 
